@@ -25,16 +25,19 @@
 
     <div class="main">
         <ul ng-controller="tournamentCtrl">
-            <li ng-repeat="tournament in tournaments | filter:currentFilter">
-                <h2>{{ tournament.name }}</h2>
-                <small>
-                    {{tournament.game}}
-                </small>
-                <button>
-                    Sign Up!
-                </button>
-                <button ng-click="showTournamentDetails(tournament.id)" class="secondary">Details</button>
-                <button ng-click="removeTournament(tournament)" class="small secondary">Remove</button>
+            <li class="tournament" ng-repeat="tournament in tournaments | filter:currentFilter" ng-click="showTournamentDetails(tournament.id)">
+                <h2 class="tournament-name">{{ tournament.name }}</h2>
+                <div class="tournament-controls">
+                    <span>
+                        Game: {{tournament.game}}
+                    </span>
+                    <button>
+                        Sign Up!
+                    </button>
+                    <button ng-click="showTournamentDetails(tournament.id)" class="secondary">Details</button>
+                    <button ng-click="removeTournament(tournament)" class="small secondary">Remove</button>
+                </div>
+
                 <div class="tourney-details" id="{{tournament.id}}" ng-show="tournament.visible">
                     <span>Start Date:
                         <span>
