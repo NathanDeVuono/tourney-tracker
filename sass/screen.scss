@@ -1,0 +1,87 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+@import url(http://fonts.googleapis.com/css?family=Roboto|Roboto+Slab:300);
+
+$dark-on-light: #333;
+$light-on-dark: #eee;
+$background:#2980b9;
+$secondary-color:$dark-on-light;
+$secondary-background:#ddd;
+$disabled-background:#dcdcdc;
+$disabled-color:darken($disabled-background, 10%);
+
+@mixin buttonStates($background-color) {
+    background-color:$background-color;
+    border-right-color: darken($background-color, 10%);
+    border-bottom-color: darken($background-color, 10%);
+    &:hover {
+        background-color:lighten($background-color, 10%);
+    }
+    &:active {
+        background-color:darken($background-color,10%);
+    }
+}
+
+input, textarea, keygen, select, button {
+    font-family:'Roboto', sans-serif; // wtf user agent?
+}
+
+body {
+    font-family:'Roboto', sans-serif;
+    font-size:120%;
+    line-height:1.5;
+    color:$dark-on-light;
+}
+
+h1, h2, h3, h4 {
+    font-family:'Roboto Slab', serif;
+    font-weight:300;
+}
+
+h1 {
+    font-size:3em;
+}
+
+h2 {
+    font-size:2em;
+}
+
+h3 {
+    font-size:1.5em;
+}
+
+button {
+    position:relative;
+    top:-.2rem;
+    height:2rem;
+
+    padding-left:1rem;
+    padding-right:1rem;
+
+    @include buttonStates($background);
+    color:$light-on-dark;
+
+    border-width:2px;
+    border-style:solid;
+    border-radius:5px;
+    border-top:none;
+    border-left: none;
+
+
+
+    &.small {
+        height:1.5rem;
+    }
+    &.secondary {
+        @include buttonStates($secondary-background);
+        color:$secondary-color;
+    }
+    &.disabled {
+        @include buttonStates($disabled-background);
+        color:$disabled-color;
+    }
+}

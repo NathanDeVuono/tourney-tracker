@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tourneyTracker">
+<head>
+    <meta charset="UTF-8">
+    <title>Tournament Manager</title>
+    <link rel="stylesheet" href="stylesheets/screen.css">
+</head>
+<body ng-cloak ng-controller="mainCtrl">
+    <header>
+        <h1 ng-click="setCurrentFilter(null)">Tournament Manager 3000</h1>
+        <nav>
+            <button ng-click="openTournamentForm()">Create New Tournament</button>
+            <h2>Filter By Game:</h2>
+            <ul>
+                <li ng-controller="gameTypeCtrl" ng-repeat="gameType in gameTypes" ng-click="setCurrentFilter(gameType)">
+                    {{gameType}}
+                </li>
+                <li>
+                    <button ng-click="setCurrentFilter(null)">Clear Filters</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <div class="main">
+        <ul ng-controller="tournamentCtrl">
+            <li ng-repeat="tournament in tournaments | filter:currentFilter">
+                <h2>{{ tournament.name }}</h2>
+                <small>
+                    {{tournament.game}}
+                </small>
+                <button>
+                    Sign Up!
+                </button>
+                <button ng-click="showTournamentDetails(tournament.id)" class="secondary">Details</button>
+                <button ng-click="removeTournament(tournament)" class="small secondary">Remove</button>
+                <div class="tourney-details" id="{{tournament.id}}" ng-show="tournament.visible">
+                    <span>Start Date:
+                        <span>
+                            {{tournament.startDate | date : 'dd MMM yyyy'}}
+                        </span>
+                    </span>
+                    <span>End Date:
+                        <span>
+                            {{tournament.endDate | date : 'dd MMM yyyy'}}
+                        </span>
+                    </span>
+                    <button ng-click=hideTournamentDetails(tournament.id)>Hide</button>
+                </div>
+            </li>
+        </ul>
+        <form ng-submit="createTournament(newTournament)" ng-show="isCreating">
+            <label for="tourneyName">Enter a name for your tournament:</label>
+            <input type="text" id="tourneyName" name="tourneyName" ng-model="newTournament.name" required>
+
+            <label for="gameSelect">What kind of game would you like to play?</label>
+            <input ng-controller="gameTypeCtrl" list="gameTypes" name="gameSelect" id="gameSelect" ng-model="newTournament.game">
+            <datalist id="gameTypes">
+                <option ng-repeat="gameType in gameTypes" required>
+                    {{ gameType }}
+                </option>
+            </datalist>
+
+            <h3 class="formLabel">When would you like your tournament to run?</h3>
+            <label for="startDate">From:</label>
+            <input type="date" name="startDate" id="startDate" ng-model="newTournament.startDate">
+            <label for="endDate">To:</label>
+            <input type="date" name="endDate" id="endDate" ng-model="newTournament.endDate">
+
+            <button type="submit">Create!</button>
+            <button ng-click="cancelTournamentForm()">Cancel</button>
+        </form>
+    </div>
+
+</body>
+<script src="bower_components/angular/angular.js"></script>
+<script src="app/tourneyTracker-app.js"></script>
+<script src="app/tournaments.js"></script>
+<script src="app/gameTypes.js"></script>
+</html>
