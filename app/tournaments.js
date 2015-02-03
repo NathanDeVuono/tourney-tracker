@@ -1,7 +1,8 @@
 angular.module('tourneyTracker')
-    .controller('tournamentCtrl', function($scope, $http) {
-
-        $http.get('app/tournaments.json').then(function (value) { $scope.tournaments = value.data.tournaments; });
+    .controller('tournamentCtrl', function($scope, tournamentsService) {
+        tournamentsService.getTournaments(function(r) {
+            $scope.tournaments = r.tournaments;
+        });
 
         function resetCreateTournamentForm($scope) {
             $scope.newTournament = {
@@ -16,6 +17,11 @@ angular.module('tourneyTracker')
         function createTournament(newTournament) {
             newTournament.id = $scope.tournaments.length;
             $scope.tournaments.push(newTournament);
+            tournamentsService.setTournaments($scope.tournaments, function(r){
+                alert(r.status);
+            });
+
+
 
             resetCreateTournamentForm();
         }
@@ -29,4 +35,14 @@ angular.module('tourneyTracker')
             }
         }
         $scope.removeTournament = removeTournament;
+    })
+    .service('tournamentsService', function($http) {
+        return  {
+            getTournaments: function(successCb) {
+                $http.get('app/tournaments.json').success(function(r){successCb(r);});
+            },
+            setTournaments: function(newTournament, successCb){
+                $http.post('app/tournaments.json', angular.toJson(newTournament)).then(function(r){successCb(r);});
+            }
+        };
     });

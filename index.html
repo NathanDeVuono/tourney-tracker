@@ -53,7 +53,8 @@
                 </div>
             </li>
         </ul>
-        <form ng-submit="createTournament(newTournament)" ng-show="isCreating">
+        <form ng-controller="tournamentCtrl" ng-submit="createTournament(newTournament)" ng-show="isCreating">
+            <h3>Create Tournament</h3>
             <label for="tourneyName">Enter a name for your tournament:</label>
             <input type="text" id="tourneyName" name="tourneyName" ng-model="newTournament.name" required>
 
