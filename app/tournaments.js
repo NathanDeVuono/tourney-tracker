@@ -1,7 +1,10 @@
 angular.module('tourneyTracker')
     .controller('tournamentCtrl', function($scope, tournamentsService) {
-        tournamentsService.getTournaments(function(r) {
-            $scope.tournaments = r.tournaments;
+        tournamentsService.getTournaments().then(function(tournamentList) {
+            $scope.tournaments = tournamentList.tournaments;
+        },
+        function(status){
+            console.log(status);
         });
 
         function resetCreateTournamentForm($scope) {
@@ -15,13 +18,14 @@ angular.module('tourneyTracker')
         }
 
         function createTournament(newTournament) {
-            newTournament.id = $scope.tournaments.length;
-            $scope.tournaments.push(newTournament);
-            tournamentsService.setTournaments($scope.tournaments, function(r){
-                alert(r.status);
+            this.newTournament.id = this.tournaments.length;
+            this.tournaments.push(this.newTournament);
+            tournamentsService.setTournaments(this.tournaments).then(function(data){
+                console.log(data);
+            },
+            function(status){
+                console.log(status);
             });
-
-
 
             resetCreateTournamentForm();
         }
@@ -36,13 +40,25 @@ angular.module('tourneyTracker')
         }
         $scope.removeTournament = removeTournament;
     })
-    .service('tournamentsService', function($http) {
+    .service('tournamentsService', function($http, $q) {
         return  {
-            getTournaments: function(successCb) {
-                $http.get('app/tournaments.json').success(function(r){successCb(r);});
+            getTournaments: function() {
+                var deferred = $q.defer();
+                $http.get('app/tournaments.json').success(function(data, status, headers, config){
+                    deferred.resolve(data);
+                }).error(function(data, status, headers, config){
+                    deferred.reject(status);
+                });
+                return deferred.promise;
             },
-            setTournaments: function(newTournament, successCb){
-                $http.post('app/tournaments.json', angular.toJson(newTournament)).then(function(r){successCb(r);});
+            setTournaments: function(newTournament){
+                var deferred = $q.defer();
+                $http.post('app/tournaments.json', angular.toJson(newTournament)).success(function(data, status, headers, config){
+                    deferred.resolve(data);
+                }).error(function(data, status, headers, config){
+                    deferred.reject(status);
+                });
+                return deferred.promise;
             }
         };
     });

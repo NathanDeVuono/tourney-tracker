@@ -1,5 +1,5 @@
 angular.module('tourneyTracker', [
-
+    'ngResource'
 ])
     .controller('mainCtrl', function($scope) {
 
@@ -32,4 +32,3 @@ angular.module('tourneyTracker', [
         }
         $scope.hideTournamentDetails = hideTournamentDetails;
     })
-    
