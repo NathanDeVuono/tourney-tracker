@@ -11,8 +11,9 @@
 }
 
 $dark-on-light: #222;
-$light-on-dark: #eee;
+$light-on-dark: #ecf0f1;
 $background:#2980b9;
+$button-background:#27ae60;
 $secondary-color:$dark-on-light;
 $secondary-background:#ddd;
 $disabled-background:#dcdcdc;
@@ -20,18 +21,48 @@ $disabled-color:darken($disabled-background, 10%);
 
 @mixin buttonStates($background-color) {
     background-color:$background-color;
-    border-right-color: darken($background-color, 10%);
-    border-bottom-color: darken($background-color, 10%);
+    border-right-color: darken($background-color, 5%);
+    border-bottom-color: darken($background-color, 5%);
     &:hover {
-        background-color:lighten($background-color, 10%);
+        background-color:lighten($background-color, 5%);
     }
     &:active {
-        background-color:darken($background-color,10%);
+        background-color:darken($background-color,5%);
     }
 }
 
-input, textarea, keygen, select, button {
-    font-family:'Roboto', sans-serif; // wtf user agent?
+@mixin buttonBorders {
+    border-width:2px;
+    border-style:solid;
+    border-radius:5px;
+    border-top:none;
+    border-left: none;
+}
+
+@mixin buttonSetBorders {
+    border-right-width:2px;
+    border-bottom-width:2px;
+    border-style:solid;
+    &:first-of-type {
+        border-radius:5px 5px 0 0;
+    }
+    &:last-of-type {
+        border-radius:0 0 5px 5px;
+    }
+}
+@mixin inlineButtonSetBorders {
+    @include buttonSetBorders;
+    &:first-of-type {
+        border-radius:5px 0 0 5px;
+    }
+    &:last-of-type {
+        border-radius: 0 5px 5px 0;
+    }
+}
+
+input, textarea, keygen, select, button { // wtf user agent?
+    font-family:'Roboto', sans-serif;
+    font-size:1em;
 }
 
 body {
@@ -58,27 +89,23 @@ h3 {
     font-size:1.5em;
 }
 
-button {
-    position:relative;
-    top:-0.5rem;
+.button {
     height:2rem;
 
     padding-left:1rem;
     padding-right:1rem;
 
-    @include buttonStates($background);
+    @include buttonStates($button-background);
+    @include buttonBorders;
+
     color:$light-on-dark;
 
-    border-width:2px;
-    border-style:solid;
-    border-radius:5px;
-    border-top:none;
-    border-left: none;
-
-
-
     &.small {
-        height:1.5rem;
+
+        font-size:.75em;
+    }
+    &.xl {
+        height:3rem;
     }
     &.secondary {
         @include buttonStates($secondary-background);
@@ -87,6 +114,28 @@ button {
     &.disabled {
         @include buttonStates($disabled-background);
         color:$disabled-color;
+    }
+}
+
+.button-set {
+    color:$light-on-dark;
+    font-size:.75em;
+    text-align:center;
+    li {
+        @include buttonStates($button-background);
+        @include buttonSetBorders;
+        padding:.6rem;
+        &:not(:last-of-type){
+            border-bottom:1px solid darken($button-background, 10%);
+        }
+        &.secondary{
+            @include buttonStates($secondary-background);
+            color:$secondary-color;
+        }
+    }
+    &.inline li {
+        float:left;
+        @include inlineButtonSetBorders;
     }
 }
 .tournament-name {
@@ -98,10 +147,7 @@ button {
     position:relative;
 
     &:not(:first-of-type) {
-        border-top:1px solid lighten($background, 20%);
-    }
-    &:nth-of-type(even) {
-        background-color:lighten($background, 30%);
+        border-top:1px solid lighten($background, 45%);
     }
     &:hover {
         background-color:lighten($background,40%);
@@ -112,4 +158,8 @@ button {
     position:absolute;
     right:0;
     top:0.8rem;
+}
+
+.tournament-game {
+    color:#7f8c8d;
 }

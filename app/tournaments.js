@@ -1,10 +1,8 @@
 angular.module('tourneyTracker')
     .controller('tournamentCtrl', function($scope, tournamentsService) {
-        tournamentsService.getTournaments().then(function(tournamentList) {
-            $scope.tournaments = tournamentList.tournaments;
-        },
-        function(status){
-            console.log(status);
+        // $scope.tournaments = tournamentsService.getTournaments();
+        tournamentsService.getTournaments().then(function(tournaments){
+            $scope.tournaments = tournaments.tournaments;
         });
 
         function resetCreateTournamentForm($scope) {
@@ -40,7 +38,18 @@ angular.module('tourneyTracker')
         }
         $scope.removeTournament = removeTournament;
     })
-    .service('tournamentsService', function($http, $q) {
+    .service('tournamentsService', function($http, $q, $resource) {
+        var resource = $resource('app/tournaments/:id', {id:'@id'}, {'query': {method: 'GET', params: {}, transformResponse: function(data, header){
+          //Getting string data in response
+        //   var jsonData = angular.fromJson(data); //or angular.fromJson(data)
+          var tournaments = [];
+          console.log(data);
+          angular.forEach(jsonData, function(tournament){
+            tournaments.push(tournament);
+          });
+
+          return tournaments;
+        }} });
         return  {
             getTournaments: function() {
                 var deferred = $q.defer();
@@ -51,6 +60,9 @@ angular.module('tourneyTracker')
                 });
                 return deferred.promise;
             },
+            // getTournaments: function(){
+            //     resource.query();
+            // },
             setTournaments: function(newTournament){
                 var deferred = $q.defer();
                 $http.post('app/tournaments.json', angular.toJson(newTournament)).success(function(data, status, headers, config){

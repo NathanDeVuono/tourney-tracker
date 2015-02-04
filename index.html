@@ -9,14 +9,14 @@
     <header>
         <h1 ng-click="setCurrentFilter(null)">Tournament Manager 3000</h1>
         <nav>
-            <button ng-click="openTournamentForm()">Create New Tournament</button>
+            <button class="button xl" ng-click="openTournamentForm()">Create New Tournament</button>
             <h2>Filter By Game:</h2>
-            <ul>
+            <ul class="button-set inline">
                 <li ng-controller="gameTypeCtrl" ng-repeat="gameType in gameTypes" ng-click="setCurrentFilter(gameType)">
                     {{gameType}}
                 </li>
-                <li>
-                    <button ng-click="setCurrentFilter(null)">Clear Filters</button>
+                <li class="secondary" ng-click="setCurrentFilter(null)">
+                    Clear Filters
                 </li>
             </ul>
         </nav>
@@ -27,15 +27,16 @@
         <ul>
             <li class="tournament" ng-repeat="tournament in tournaments | filter:currentFilter" ng-click="showTournamentDetails(tournament.id)">
                 <h2 class="tournament-name">{{ tournament.name }}</h2>
+                <span class="tournament-game">
+                    Game: {{tournament.game}}
+                </span>
                 <div class="tournament-controls">
-                    <span>
-                        Game: {{tournament.game}}
-                    </span>
-                    <button>
+
+                    <button class="button">
                         Sign Up!
                     </button>
-                    <button ng-click="showTournamentDetails(tournament.id)" class="secondary">Details</button>
-                    <button ng-click="removeTournament(tournament)" class="small secondary">Remove</button>
+                    <button class="button secondary" ng-click="showTournamentDetails(tournament.id)">Details</button>
+                    <button class="button secondary small" ng-click="removeTournament(tournament)">Remove</button>
                 </div>
 
                 <div class="tourney-details" id="{{tournament.id}}" ng-show="tournament.visible">
@@ -49,7 +50,7 @@
                             {{tournament.endDate | date : 'dd MMM yyyy'}}
                         </span>
                     </span>
-                    <button ng-click=hideTournamentDetails(tournament.id)>Hide</button>
+                    <button class="button secondary" ng-click=hideTournamentDetails(tournament.id)>Hide</button>
                 </div>
             </li>
         </ul>
@@ -72,8 +73,8 @@
             <label for="endDate">To:</label>
             <input type="date" name="endDate" id="endDate" ng-model="newTournament.endDate">
 
-            <button type="submit">Create!</button>
-            <button ng-click="cancelTournamentForm()">Cancel</button>
+            <button class="button" type="submit">Create!</button>
+            <button class="button secondary" ng-click="cancelTournamentForm()">Cancel</button>
         </form>
     </div>
 
